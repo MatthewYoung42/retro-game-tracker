@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  RetroGameTracker
 //
-//  Created by Matthew Y on 5/4/26.
+//  Created by Matthew Young on 5/4/26.
 //
 
 import SwiftUI
