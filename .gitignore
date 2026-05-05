@@ -1,0 +1,20 @@
+# Xcode
+*.xcuserdata/
+xcuserdata/
+DerivedData/
+build/
+
+# macOS
+.DS_Store
+*.swp
+
+# API Keys
+*.env
+Config.xcconfig
+
+# Swift Package Manager
+.build/
+Packages/
+
+# CocoaPods (if you ever use them)
+Pods/
