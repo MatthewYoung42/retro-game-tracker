@@ -8,26 +8,27 @@
 import Foundation
 import Combine
 
+enum ViewState {
+    case loading
+    case error(String)
+    case loaded([Game])
+}
+
 @MainActor
 class GameListViewModel: ObservableObject {
-    @Published var games: [Game] = []
-    @Published var isLoading: Bool = false
-    @Published var errorMessage: String?
+    @Published var state: ViewState = .loading
     
     func loadGames() async {
         let service = RAWGAPIService()
         
-        isLoading = true
-        errorMessage = nil
+        state = .loading
         
         do {
-            self.games = try await service.fetchTopGames()
+            state = .loaded(try await service.fetchTopGames())
         } catch {
             print("Error Occurred: \(error)")
-            errorMessage = error.localizedDescription
+            state = .error(error.localizedDescription)
         }
         
-        isLoading = false
-
     }
 }

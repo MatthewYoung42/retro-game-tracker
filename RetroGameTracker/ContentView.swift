@@ -11,23 +11,28 @@ struct ContentView: View {
     @StateObject private var viewModel = GameListViewModel()
     
     var body: some View {
-        ZStack {
-            NavigationStack {
-                List(viewModel.games) { game in
-                    Text(game.name)
+        NavigationStack {
+            ZStack {
+                switch viewModel.state {
+                case .loaded(let gameList):
+                    if gameList.isEmpty {
+                        Text("No games found!")
+                            .foregroundColor(.secondary)
+                    } else {
+                        List(gameList) { game in
+                            Text(game.name)
+                        }
+                    }
+                case .loading:
+                    ProgressView("Loading...")
+                case .error(let errorMessage):
+                    Text(errorMessage)
                 }
-                .task {
-                    await viewModel.loadGames()
-                }
-                .navigationTitle("Games")
-                .opacity(viewModel.isLoading && (viewModel.errorMessage == nil) ? 0 : 1)
             }
-            if viewModel.isLoading {
-                ProgressView("Loading...")
-                    .transition(.opacity)
-            } else if let errorMessage = viewModel.errorMessage {
-                Text(errorMessage)
-            }
+            .navigationTitle("Games")
+        }
+        .task {
+            await viewModel.loadGames()
         }
     }
 }
